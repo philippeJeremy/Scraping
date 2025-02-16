@@ -9,28 +9,30 @@ load_dotenv()
 
 logging.basicConfig(level=logging.ERROR, filename='sql_errors.log')
 
+
 def requete(sql_requete) -> pd.DataFrame:
     logging.basicConfig(level=logging.ERROR, filename='sql_errors.log')
     HOST = os.getenv('HOST')
     ID = os.getenv('ID')
     DATABASE = os.getenv('DATABASE')
     PSWD = os.getenv('PSWD')
-    
+
     try:
 
         connection_string = f"mssql+pyodbc://{ID}:{PSWD}@{HOST}/{DATABASE}?driver=ODBC+Driver+17+for+SQL+Server"
 
         engine = create_engine(connection_string)
-    
+
         df = pd.read_sql_query(sql_requete, engine)
-        
+
         engine.dispose()
     except Exception as ex:
         logging.error(f"Erreur lors de l'insertion des données : {ex}")
         if engine:
             engine.dispose()
-    
+
     return df
+
 
 def save_donnees_sql(df: pd.DataFrame):
     """
@@ -64,7 +66,7 @@ def save_donnees_sql(df: pd.DataFrame):
                     INSERT INTO scraping_price (Marque, Model, Charge, Vitesse, Largeur, Diametre, Hauteur, Prix_HT, Saison, Date, Site, EAN)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             """, row['Marque'], row['Model'], row['Charge'], row['Vitesse'], row['Largeur'], row['Diametre'],
-                            row['Hauteur'], row['Prix_HT'], row['Saison'], row['Date'], row['Site'], row['EAN'])
+                           row['Hauteur'], row['Prix_HT'], row['Saison'], row['Date'], row['Site'], row['EAN'])
         conn.commit()
         cursor.close()
         conn.close()

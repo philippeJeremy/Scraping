@@ -123,7 +123,7 @@ def extract_tire_data(driver: webdriver, ean: str) -> dict:
         return None
 
 
-def SITE3():
+def site3():
     """Extrait les données des pneus depuis SITE3."""
 
     logging.basicConfig(level=logging.ERROR, filename='SITE3_errors.log')
@@ -173,4 +173,4 @@ def SITE3():
 
 if __name__ == '__main__':
 
-    SITE3()
+    site3()

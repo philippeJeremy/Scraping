@@ -4,11 +4,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def recup_article_chrono():
+
+def article_comparaison():
     df = pd.read_excel('pneus.xlsx', sheet_name='Entreprise')
     ean_code = df['EAN'].to_list()
     codes_in_clause = ', '.join(f"'{code}'" for code in ean_code)
-    
+
     request_sql = f"""
             SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;
             SELECT 
@@ -25,11 +26,11 @@ def recup_article_chrono():
             WHERE 
                 a.gencode IN ({codes_in_clause}) AND t.c_tarif = 'PLOMB' 
         """
-        
-    df = requete(request_sql)  
-    
+
+    df = requete(request_sql)
+
     save_donnees_sql(df)
-    
-    
+
+
 if __name__ == '__main__':
     recup_article_chrono()
